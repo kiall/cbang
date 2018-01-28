@@ -190,7 +190,12 @@ def get_event_config_defs():
     # TODO Define EVENT__HAVE_WORKING_KQUEUE if kqueue works correctly w/ pipes
 
     # to_def
-    from string import maketrans
+    try:
+        from string import maketrans
+    except ImportError:
+        # Python 3
+        maketrans = str.maketrans
+
     trans = maketrans('/. *', '___P')
 
     def to_def(name):
