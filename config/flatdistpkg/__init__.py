@@ -43,7 +43,7 @@ build_dir_distribution_xml = \
 def RunCommandOrRaise(env, cmd):
     print '@', cmd
     ret = CommandAction(cmd).execute(None, [], env)
-    if ret: raise Exception, 'command failed, return code %s' % str(ret)
+    if ret: raise Exception('command failed, return code %s' % str(ret))
 
 
 def clean_old_build(env):
@@ -151,13 +151,13 @@ def build_component_pkg(info, env):
     pkg_nopayload = info.get('pkg_nopayload', False)
 
     if not name:
-        raise Exception, 'component has no name'
+        raise Exception('component has no name')
     if not home:
-        raise Exception, 'component %s has no home' % name
+        raise Exception('component %s has no home' % name)
     if not pkg_id:
-        raise Exception, 'component %s has no pkg_id' % name
+        raise Exception('component %s has no pkg_id' % name)
     if not version:
-        raise Exception, 'no version for component %s' % name
+        raise Exception('no version for component %s' % name)
 
     stage = os.path.join(build_dir_stage, name)
     stage_resources = os.path.join(stage, 'Resources')
@@ -194,7 +194,7 @@ def build_component_pkg(info, env):
         pass
 
     if not os.path.isdir(root) and not pkg_nopayload:
-        raise Exception, '%s component root does not exist! %s' % (name,root)
+        raise Exception('%s component root does not exist! %s' % (name,root))
 
     # try to copy scripts to our stage and use that to avoid most cruft
     # also allows renaming scripts before pkgbuild
@@ -251,7 +251,7 @@ def build_component_pkgs(env):
 
     if not components:
         # in future, maybe handle as implicit pkg+distpkg if pkg_type dist
-        raise Exception, 'no components specified'
+        raise Exception('no components specified')
 
     # validate and fill-in any missing info
     for info in components:
@@ -259,7 +259,7 @@ def build_component_pkgs(env):
         home = info.get('home')
         if not home:
             name = info.get('name') # might be None at this point
-            raise Exception, 'home not provided for component ' + name
+            raise Exception('home not provided for component ' + name)
         # name and pkg_id are also required, but may be in json
 
         # try to load pkg info json, if exists
@@ -308,7 +308,7 @@ def build_component_pkgs(env):
     for info in components:
         try:
             build_component_pkg(info, env)
-        except Exception, e:
+        except Exception as e:
             print 'unable to build component ' + info.get('name')
             raise e
 
@@ -362,9 +362,9 @@ def unlock_keychain(env, keychain=None, password=None):
             print '@', sanitized_cmd
             # returns 0 if keychain already unlocked, even if pass is wrong
             ret = CommandAction(cmd).execute(None, [], env)
-            if ret: raise Exception, \
-                'unlock-keychain failed, return code %s' % str(ret)
-        except Exception, e:
+            if ret: raise Exception(
+                'unlock-keychain failed, return code %s' % str(ret))
+        except Exception as e:
             print 'unable to unlock keychain "%s"' % name
             raise e
     else:
@@ -376,11 +376,11 @@ def sign_flat_package(target, source, env):
     sign = env.get('sign_id_installer', None)
     keychain = env.get('sign_keychain', None)
     if not sign:
-        raise Exception, 'unable to sign; no sign_id_installer provided'
+        raise Exception('unable to sign; no sign_id_installer provided')
     # FIXME should do more than this
     x, ext = os.path.splitext(source)
     if not (os.path.isfile(source) and ext in ('.pkg', '.mpkg')):
-        raise Exception, 'unable to sign; not a flat package: ' + source
+        raise Exception('unable to sign; not a flat package: ' + source)
     cmd = ['productsign', '--sign', sign]
     if keychain:
         cmd += ['--keychain', keychain]
@@ -412,9 +412,9 @@ def sign_application(target, env):
     if sign:
         cmd += ['--sign', sign]
     else:
-        raise Exception, 'unable to codesign %s; no sign_id_app given' % target
+        raise Exception('unable to codesign %s; no sign_id_app given' % target)
     if not os.path.isdir(target) or not target.endswith('.app'):
-        raise Exception, 'unable to codesign %s; not an app' % target
+        raise Exception('unable to codesign %s; not an app' % target)
     cmd += [target]
     RunCommandOrRaise(env, cmd)
 
@@ -430,13 +430,13 @@ def sign_executable(target, env):
         if not prefix.endswith('.'): prefix += '.'
         cmd += ['--prefix', prefix]
     else:
-        raise Exception, 'unable to codesign %s; no sign_prefix given' % target
+        raise Exception('unable to codesign %s; no sign_prefix given' % target)
     if sign:
         cmd += ['--sign', sign]
     else:
-        raise Exception, 'unable to codesign %s; no sign_id_app given' % target
+        raise Exception('unable to codesign %s; no sign_id_app given' % target)
     if not (os.path.isfile(target) and os.access(target, os.X_OK)):
-        raise Exception, 'unable to codesign %s; not an executable' % target
+        raise Exception('unable to codesign %s; not an executable' % target)
     # FIXME should not try to sign executable scripts
     cmd += [target]
     RunCommandOrRaise(env, cmd)
@@ -453,7 +453,7 @@ def build_or_copy_distribution_template(env):
     print 'WARNING: did not generate distribution.xml; ' \
         + 'using pre-built template %s' % source
     if not os.path.isfile(source):
-        raise Exception, 'pre-built template does not exist %s' % source
+        raise Exception('pre-built template does not exist %s' % source)
     #Execute(Copy(target, source))
     # sometimes after a 'scons --clean', above fails with
     # scons: *** [fah-installer_7.2.12_intel.pkg.zip] TypeError :
@@ -735,10 +735,10 @@ def flat_dist_pkg_build(target, source, env):
     # tolerate .mpkg, because installer seems semi-ok with it
     # TODO allow no .zip, and no ZipDir()
     target_pkg, ext = os.path.splitext(target_zip)
-    if ext != '.zip': raise Exception, 'Expected .zip in package name'
+    if ext != '.zip': raise Exception('Expected .zip in package name')
     target_base, ext = os.path.splitext(target_pkg)
     if not ext in ('.pkg', '.mpkg'):
-        raise Exception, 'Expected .pkg or .mpkg in package name'
+        raise Exception('Expected .pkg or .mpkg in package name')
 
     # .mpkg causes errors in log, and does not work on 10.5,
     # so use .pkg for flat package, even if final target is .mpkg.zip
@@ -747,9 +747,9 @@ def flat_dist_pkg_build(target, source, env):
     # flat packages require OS X 10.5+
     distpkg_target = env.get('distpkg_target', '10.5')
     if distpkg_target.split('.') < '10.5'.split('.'):
-        raise Exception, \
-            'incompatible configuration: flat package and osx pre-10.5 (%s)' \
-            % distpkg_target
+        raise Exception(
+            'incompatible configuration: flat package and osx pre-10.5 (%s)'
+            % distpkg_target)
 
     clean_old_build(env)
     create_dirs(env)
@@ -777,7 +777,7 @@ def flat_dist_pkg_build(target, source, env):
     # I think build_component_pkgs always raises on any failure
     components = env.get('distpkg_components')
     if components is None or not len(components):
-        raise Exception, 'No distpkg_components. Cannot continue.'
+        raise Exception('No distpkg_components. Cannot continue.')
 
     # create Localizable.strings with dist title, component descriptions
     # this must be done AFTER components are built

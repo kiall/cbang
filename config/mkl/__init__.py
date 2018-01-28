@@ -85,7 +85,7 @@ def CheckMKL(ctx):
 
 
 def RequireMKL(ctx):
-    if not CheckMKL(ctx): raise Exception, 'Need MKL'
+    if not CheckMKL(ctx): raise Exception('Need MKL')
     return True
 
 

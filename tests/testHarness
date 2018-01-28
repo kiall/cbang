@@ -207,14 +207,14 @@ def execute_proc(command, timeout, **kwargs):
       if timeout and timeout < start - time.time():
         if sys.platform == 'win32': proc.kill()
         else: os.killpg(proc.pid)
-        raise Exception, 'Timedout'
+        raise Exception('Timedout')
       time.sleep(0.1)
 
     return proc.returncode
 
-  except Exception, e:
-    raise Exception, 'Running: ' + ' '.join(command) + \
-        '\nCaused by:' + str(e)
+  except Exception as e:
+    raise Exception('Running: ' + ' '.join(command) +
+        '\nCaused by:' + str(e))
 
 
 def remove_tree(path):
@@ -782,7 +782,7 @@ class CheckFilePattern(CheckFile):
 
       return CheckFile.check(self, test)
 
-    except Exception, e:
+    except Exception as e:
       if options.verbose: output_stream.write(str(e))
       return FAILED
 
@@ -862,8 +862,8 @@ class Table:
 
     # Check row width
     if self.columns != len(row):
-      raise Exception, \
-          'Row has ' + len(row) + ' columns, expected ' + self.columns
+      raise Exception(
+          'Row has ' + len(row) + ' columns, expected ' + self.columns)
 
     self.rows.append(row)
 
@@ -923,7 +923,7 @@ class CheckDB(CheckFile):
 
     if sql is None:
       if cols is None or table is None:
-        raise Exception, 'Must set either "sql" or "cols" and "table"'
+        raise Exception('Must set either "sql" or "cols" and "table"')
       if orderBy is None: orderBy = [cols[0]]
       self.sql = 'SELECT ' + ', '.join(cols) + ' FROM "' + table + \
           '" ORDER BY ' + ', '.join(orderBy)
@@ -948,7 +948,7 @@ class CheckDB(CheckFile):
       c.execute(self.sql)
       for row in c: table.add_row(map(str, row))
       c.close()
-    except Exception, e: return FAILED
+    except Exception as e: return FAILED
 
     # Write
     write_file(self.get_output(test),
@@ -1027,7 +1027,7 @@ class Unit:
       if os.path.exists(path):
         self.config.update(json.loads(read_file(path)))
 
-    except Exception, e:
+    except Exception as e:
       raise HarnessError('Failed to parse test.json file in %s: %s' % (
          self.get_full_name(), e))
 
@@ -1068,7 +1068,7 @@ class Unit:
 
     try:
       return map(lambda item: item % self.config, value)
-    except Exception, e:
+    except Exception as e:
       raise HarnessError('Error resolving %s "%s": %s' % (name, value, e))
 
 
@@ -1171,7 +1171,7 @@ class Unit:
     # Resolve command vars refs
     try:
       command = map(lambda s: s % self.config, command)
-    except Exception, e:
+    except Exception as e:
       raise HarnessError('Error resolving command "%s": %s' % (command, e))
 
     return command
@@ -1245,7 +1245,7 @@ class Unit:
       self.status = self.check.check(self)
 
       # Check status
-      if self.status is None: raise Exception, 'Test result not set'
+      if self.status is None: raise Exception('Test result not set')
       self.reason = self.check.reason
 
     # Logging
@@ -1455,7 +1455,7 @@ class TestSuite:
     if os.path.exists(path):
       try:
         self.config.update(json.loads(read_file(path)))
-      except Exception, e:
+      except Exception as e:
         raise HarnessError('Failed to parse suite test.json: ' + str(e))
 
       if 'command' in self.config:
@@ -1575,8 +1575,8 @@ class TestSuite:
       env.update(globals())
 
       try: execfile(script, env)
-      except Exception, e:
-        raise Exception, 'Exception in "%s": %s' % (script, str(e))
+      except Exception as e:
+        raise Exception('Exception in "%s": %s' % (script, str(e)))
 
       if not 'Suite' in env:
         raise HarnessError(
@@ -1655,7 +1655,7 @@ class TestSuite:
     errStr = "'%s' not found and variable '%s' not set" % (name, conf_name)
     if home_var is not None and home_var in os.environ:
       errStr += ' and ' + home_var + '=' + os.environ[home_var]
-    raise Exception, errStr
+    raise Exception(errStr)
 
 
 class TestResults:
@@ -1932,7 +1932,7 @@ if options.dump_config:
 try:
   sys.exit(TestHarness(config).run(cmd_args))
 
-except HarnessError, e:
+except HarnessError as e:
   sys.stdout.flush()
   if e.show_usage: parser.error(e.msg)
   else: sys.stderr.write('ERROR: ' + e.msg + '\n')

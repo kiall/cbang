@@ -45,7 +45,7 @@ def svn_get_info():
                 branch = line[5:].strip()
                 branch = re.sub(r'https?://[\w\.]+/(svn/)?', '', branch)
 
-    except Exception, e:
+    except Exception as e:
         print e
 
     return revision, branch
@@ -60,7 +60,7 @@ def git_get_info():
         out, err = p.communicate()
         revision = out.strip()
 
-    except Exception, e:
+    except Exception as e:
         print e
 
     try:
@@ -69,7 +69,7 @@ def git_get_info():
         out, err = p.communicate()
         branch = out.strip()
 
-    except Exception, e:
+    except Exception as e:
         print e
 
     return revision, branch

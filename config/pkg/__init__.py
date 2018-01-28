@@ -10,7 +10,7 @@ from SCons.Action import CommandAction
 def RunCommandOrRaise(env, cmd):
     print '@', cmd
     ret = CommandAction(cmd).execute(None, [], env)
-    if ret: raise Exception, 'command failed, return code %s' % str(ret)
+    if ret: raise Exception('command failed, return code %s' % str(ret))
 
 
 def InstallApps(env, key, target):

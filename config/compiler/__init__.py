@@ -512,7 +512,7 @@ def prefer_static_libs(env):
                 continue
 
         if require_static.match(name):
-            raise Exception, 'Failed to find static library for "%s"' % name
+            raise Exception('Failed to find static library for "%s"' % name)
 
         libs.append(lib)
 

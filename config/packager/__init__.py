@@ -68,7 +68,7 @@ def _GetPackageType(env):
         pkg_type = env.get('pkg_type', None)
         if pkg_type is None or pkg_type in ('single', 'app'): return 'pkg'
         elif pkg_type == 'dist': return 'mpkg'
-        else: raise Exception, 'Invalid pkg package type "%s"' % pkg_type
+        else: raise Exception('Invalid pkg package type "%s"' % pkg_type)
 
     elif env['PLATFORM'] == 'posix':
         dist = platform.dist()[0].lower()
@@ -83,9 +83,9 @@ def _GetPackageType(env):
         if os.path.exists('/usr/bin/dpkg'): return 'deb'
         if os.path.exists('/usr/bin/rpmbuild'): return 'rpm'
 
-        raise Exception, 'Unsupported POSIX distribution ' + dist
+        raise Exception('Unsupported POSIX distribution ' + dist)
 
-    raise Exception, 'Unsupported package platform %s' % env['PLATFORM']
+    raise Exception('Unsupported package platform %s' % env['PLATFORM'])
 
 
 def GetPackageType(env):

@@ -14,7 +14,7 @@ def configure(conf):
 
     if env['PLATFORM'] == 'darwin' or int(env.get('cross_osx', 0)):
         if not conf.CheckOSXFramework('CoreServices'):
-            raise Exception, 'Need CoreServices framework'
+            raise Exception('Need CoreServices framework')
 
     conf.CBRequireCHeader('ft2build.h')
     conf.CBRequireLib('freetype')

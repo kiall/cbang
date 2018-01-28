@@ -14,7 +14,7 @@ def CBCheckEnv(ctx, name, require = False):
     if os.environ.has_key(name):
         return os.environ[name]
 
-    elif require: raise Exception, "Missing environment variable: " + name
+    elif require: raise Exception("Missing environment variable: " + name)
 
 
 def CBRequireEnv(ctx, name):
@@ -108,7 +108,7 @@ def CBCheckLib(ctx, lib, unique = False, append = False, **kwargs):
 def CBRequireLib(ctx, lib, **kwargs):
     ctx.did_show_result = 1
     if not ctx.sconf.CBCheckLib(lib, **kwargs):
-        raise Exception, 'Need library ' + lib
+        raise Exception('Need library ' + lib)
 
 
 def CBCheckHeader(ctx, hdr, **kwargs):
@@ -119,7 +119,7 @@ def CBCheckHeader(ctx, hdr, **kwargs):
 def CBRequireHeader(ctx, hdr, **kwargs):
     ctx.did_show_result = 1
     if not ctx.sconf.CheckHeader(hdr, **kwargs):
-        raise Exception, 'Need header ' + hdr
+        raise Exception('Need header ' + hdr)
 
 
 def CBCheckCHeader(ctx, hdr, **kwargs):
@@ -130,7 +130,7 @@ def CBCheckCHeader(ctx, hdr, **kwargs):
 def CBRequireCHeader(ctx, hdr, **kwargs):
     ctx.did_show_result = 1
     if not ctx.sconf.CheckCHeader(hdr, **kwargs):
-        raise Exception, 'Need C header ' + hdr
+        raise Exception('Need C header ' + hdr)
 
 
 def CBCheckCXXHeader(ctx, hdr, **kwargs):
@@ -141,7 +141,7 @@ def CBCheckCXXHeader(ctx, hdr, **kwargs):
 def CBRequireCXXHeader(ctx, hdr, **kwargs):
     ctx.did_show_result = 1
     if not ctx.sconf.CheckCXXHeader(hdr, **kwargs):
-        raise Exception, 'Need C++ header ' + hdr
+        raise Exception('Need C++ header ' + hdr)
 
 
 def CBCheckFunc(ctx, func, **kwargs):
@@ -152,7 +152,7 @@ def CBCheckFunc(ctx, func, **kwargs):
 def CBRequireFunc(ctx, func, **kwargs):
     ctx.did_show_result = 1
     if not ctx.sconf.CheckFunc(func, **kwargs):
-        raise Exception, 'Need Function ' + func
+        raise Exception('Need Function ' + func)
 
 
 def CBConfig(ctx, name, required = True, **kwargs):
@@ -170,7 +170,7 @@ def CBConfig(ctx, name, required = True, **kwargs):
             # Commit changes
             if ret: env.Replace(**conf.env.Dictionary())
 
-        except Exception, e:
+        except Exception as e:
             if required: raise
             ctx.Message(str(e))
 
@@ -178,12 +178,12 @@ def CBConfig(ctx, name, required = True, **kwargs):
             conf.env = env # Put back master env
 
         if ret: env.cb_enabled.add(name)
-        elif required: raise Exception, 'Failed to configure ' + name
+        elif required: raise Exception('Failed to configure ' + name)
 
         return ret
 
     elif required:
-        raise Exception, 'Config method not defined for tool ' + name
+        raise Exception('Config method not defined for tool ' + name)
 
     return False
 
@@ -201,7 +201,7 @@ def CBTryLoadTool(env, name, path):
         env.cb_paths.pop()
         return True
 
-    except Exception, e:
+    except Exception as e:
         traceback.print_exc()
         env.cb_loaded.remove(name)
         env.cb_paths.pop()
@@ -235,7 +235,7 @@ def CBLoadTool(env, name, paths = []):
         msg += '\nHave you set ' + home_env_var + '?'
 
     print msg
-    raise Exception, 'Failed to load tool ' + name
+    raise Exception('Failed to load tool ' + name)
 
 
 def CBLoadTools(env, tools, paths = []):
