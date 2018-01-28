@@ -58,6 +58,12 @@ except:
   def OrderedDict():
     dict()
 
+# Define basestring == str for Python 3
+try:
+  basestring
+except NameError:
+  basestring = str
+
 # Test result codes
 PASSED = 0
 FAILED = 1

@@ -8,6 +8,12 @@ import shlex
 
 from SCons.Script import *
 
+# Define basestring == str for Python 3
+try:
+  basestring
+except NameError:
+  basestring = str
+
 
 def build_function(target, source, env):
     # Create app dir

@@ -9,6 +9,12 @@ import SCons.Action
 import SCons.Builder
 import SCons.Tool
 
+# Define basestring == str for Python 3
+try:
+  basestring
+except NameError:
+  basestring = str
+
 
 def CheckRDynamic(context):
     context.Message('Checking for -rdynamic...')

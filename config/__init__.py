@@ -18,6 +18,12 @@ import inspect
 import types
 import re
 
+# Define basestring == str for Python 3
+try:
+  basestring
+except NameError:
+  basestring = str
+
 
 def CBCheckEnv(ctx, name, require = False):
     ctx.did_show_result = 1
