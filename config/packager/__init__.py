@@ -201,7 +201,7 @@ def ResolvePackageFileMap(env, sources, target):
     return resolve_file_map(sources, target, ignores)
 
 
-def CopyToPackage(env, sources, target, perms = 0644, dperms = 0755):
+def CopyToPackage(env, sources, target, perms = 0o644, dperms = 0o755):
     ignores = ignore_patterns(*env.get('PACKAGE_EXCLUDES'))
 
     for src, dst, mode in resolve_file_map(sources, target, ignores):
@@ -217,7 +217,7 @@ def CopyToPackage(env, sources, target, perms = 0644, dperms = 0755):
             os.chmod(dst, perms)
 
 
-def InstallFiles(env, key, target, perms = 0644, dperms = 0755):
+def InstallFiles(env, key, target, perms = 0o644, dperms = 0o755):
     if key in env: env.CopyToPackage(env.get(key), target, perms, dperms)
 
 

@@ -20,7 +20,7 @@ def build_function(target, source, env):
     contents_dir = os.path.join(build_dir, 'Contents')
     packages_dir = os.path.join(contents_dir, 'Packages')
     resources_dir = os.path.join(contents_dir, 'Resources')
-    for d in (contents_dir, packages_dir, resources_dir): os.makedirs(d, 0775)
+    for d in (contents_dir, packages_dir, resources_dir): os.makedirs(d, 0o775)
 
     # Load package info
     pkg_info = []

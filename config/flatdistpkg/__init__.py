@@ -80,7 +80,7 @@ def create_dirs(env):
     dirs = build_dirs #+ env.get('build_dirs',[])
     for d in dirs:
         if not os.path.isdir(d):
-            os.makedirs(d, 0755)
+            os.makedirs(d, 0o755)
     #env.Dir(build_dir)
     # above fails with
     # scons: *** [fah-installer_7.2.12_intel.pkg.zip] TypeError :
@@ -199,7 +199,7 @@ def build_component_pkg(info, env):
     # try to copy scripts to our stage and use that to avoid most cruft
     # also allows renaming scripts before pkgbuild
     if scripts and os.path.isdir(scripts):
-        env.CopyToPackage(scripts, stage, perms=0755)
+        env.CopyToPackage(scripts, stage, perms=0o755)
 
     # copy resources to our stage for future distpkg use
     if resources and os.path.isdir(resources):
@@ -722,7 +722,7 @@ def create_localizable_strings(env):
             print('no description found for component ' + comp['name'])
     # save it (overwrites if exists)
     d = build_dir_resources + '/en.lproj'
-    if not os.path.isdir(d): os.makedirs(d, 0755)
+    if not os.path.isdir(d): os.makedirs(d, 0o755)
     fname = d + '/Localizable.strings'
     print('writing ' + fname)
     env.WriteStringToFile(fname, lines)

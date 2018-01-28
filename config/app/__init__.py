@@ -24,7 +24,7 @@ def build_function(target, source, env):
     contents_dir = os.path.join(app_dir, 'Contents')
     resources_dir = os.path.join(contents_dir, 'Resources')
     macos_dir = os.path.join(contents_dir, 'MacOS')
-    for d in (contents_dir, resources_dir, macos_dir): os.makedirs(d, 0775)
+    for d in (contents_dir, resources_dir, macos_dir): os.makedirs(d, 0o775)
 
     # Create Info.plist
     import plistlib
@@ -64,8 +64,8 @@ def build_function(target, source, env):
     env.InstallFiles('icons', contents_dir + '/Resources')
     env.InstallFiles('changelog', contents_dir + '/SharedSupport')
     env.InstallFiles('license', contents_dir + '/SharedSupport')
-    env.InstallFiles(programs_key, contents_dir + '/MacOS', 0755)
-    env.InstallFiles('scripts', contents_dir + '/MacOS', 0755)
+    env.InstallFiles(programs_key, contents_dir + '/MacOS', 0o755)
+    env.InstallFiles('scripts', contents_dir + '/MacOS', 0o755)
     env.InstallFiles('app_resources', contents_dir + '/Resources')
     env.InstallFiles('app_shared', contents_dir + '/SharedSupport')
     env.InstallFiles('app_frameworks', contents_dir + '/Frameworks')

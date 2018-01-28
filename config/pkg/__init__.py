@@ -33,12 +33,12 @@ def build_function(target, source, env):
 
     # Make root dir
     root_dir = os.path.join(build_dir, 'root')
-    os.makedirs(root_dir, 0775)
+    os.makedirs(root_dir, 0o775)
 
     # Apps
     if 'pkg_apps' in env:
         d = os.path.join(root_dir, 'Applications')
-        os.makedirs(d, 0775)
+        os.makedirs(d, 0o775)
         InstallApps(env, 'pkg_apps', d)
 
     # Other files

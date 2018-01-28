@@ -59,7 +59,7 @@ def write_control(path, env, installed_size):
         if f is not None: f.close()
 
 
-def install_files(env, key, target, perms = 0644, dperms = 0755):
+def install_files(env, key, target, perms = 0o644, dperms = 0o755):
     if key in env: env.CopyToPackage(env.get(key), target, perms, dperms)
 
 
@@ -74,7 +74,7 @@ def build_function(target, source, env):
     # Create package build dir
     build_dir = 'build/%s-deb' % name
     if os.path.exists(build_dir): shutil.rmtree(build_dir)
-    os.makedirs(build_dir, 0755)
+    os.makedirs(build_dir, 0o755)
 
     # Copy user control files
     shutil.copytree(env.get('deb_directory'), build_dir + '/DEBIAN',
@@ -82,10 +82,10 @@ def build_function(target, source, env):
 
     # Copy files into package
     install_files(env, 'documents', build_dir + '/usr/share/doc/' + name)
-    install_files(env, 'programs', build_dir + '/usr/bin', 0755)
-    install_files(env, 'scripts', build_dir + '/usr/bin', 0755)
+    install_files(env, 'programs', build_dir + '/usr/bin', 0o755)
+    install_files(env, 'scripts', build_dir + '/usr/bin', 0o755)
     install_files(env, 'desktop_menu', build_dir + '/usr/share/applications')
-    install_files(env, 'init_d', build_dir + '/etc/init.d', 0755)
+    install_files(env, 'init_d', build_dir + '/etc/init.d', 0o755)
     install_files(env, 'config', build_dir + '/etc/' + name)
     install_files(env, 'icons', build_dir + '/usr/share/pixmaps')
     install_files(env, 'mime', build_dir + '/usr/share/mime/packages')
@@ -106,7 +106,7 @@ def build_function(target, source, env):
     finally:
         if f is not None:
             f.close()
-            os.chmod(filename, 0644)
+            os.chmod(filename, 0o644)
 
     # Debian changelog
     changelog = build_dir + '/DEBIAN/changelog'
@@ -151,8 +151,8 @@ def build_function(target, source, env):
 
     # Fix permissions
     for path in env.FindFiles(build_dir + '/DEBIAN'):
-        mode = os.stat(path).st_mode & 0700
-        mode = (mode | (mode >> 3) | (mode >> 6)) & 0755
+        mode = os.stat(path).st_mode & 0o700
+        mode = (mode | (mode >> 3) | (mode >> 6)) & 0o755
         os.chmod(path, mode)
 
     # Build the package
