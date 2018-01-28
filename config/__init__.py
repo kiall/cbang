@@ -1,6 +1,17 @@
 import os
 import sys
-import urllib2
+try:
+    # For Python 3.0 and later
+    from urllib.request import urlopen
+    from urllib.request import build_opener as urllib_build_opener
+    from urllib.request import install_opener as urllib_install_opener
+    from urllib.request import ProxyHandler as UrllibProxyHandler
+except ImportError:
+    # Fall back to Python 2's urllib2
+    from urllib2 import urlopen
+    from urllib2 import build_opener as urllib_build_opener
+    from urllib2 import install_opener as urllib_install_opener
+    from urllib2 import ProxyHandler as UrllibProxyHandler
 import traceback
 from SCons.Script import *
 import inspect
@@ -357,13 +368,13 @@ def CBDownload(env, target, url):
         if ftp_proxy: handlers['ftp'] = ftp_proxy
         if http_proxy: handlers['http'] = http_proxy
 
-        opener = urllib2.build_opener(urllib2.ProxyHandler(handlers))
-        urllib2.install_opener(opener)
+        opener = urllib_build_opener(UrllibProxyHandler(handlers))
+        urllib_install_opener(opener)
 
     f = None
     stream = None
     try:
-        stream = urllib2.urlopen(url)
+        stream = urlopen(url)
         f = open(target, 'wb', 0) # Unbuffered
         while stream and f:
             data = stream.read(1024 * 1024)
