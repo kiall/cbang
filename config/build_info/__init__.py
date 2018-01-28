@@ -46,7 +46,7 @@ def svn_get_info():
                 branch = re.sub(r'https?://[\w\.]+/(svn/)?', '', branch)
 
     except Exception as e:
-        print e
+        print(e)
 
     return revision, branch
 
@@ -61,7 +61,7 @@ def git_get_info():
         revision = out.strip()
 
     except Exception as e:
-        print e
+        print(e)
 
     try:
         p = subprocess.Popen(['git', 'rev-parse', '--abbrev-ref', 'HEAD'],
@@ -70,7 +70,7 @@ def git_get_info():
         branch = out.strip()
 
     except Exception as e:
-        print e
+        print(e)
 
     return revision, branch
 

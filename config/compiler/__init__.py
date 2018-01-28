@@ -164,10 +164,10 @@ def configure(conf, cstd = 'c99'):
     env.__setitem__('compiler', compiler)
     env.__setitem__('compiler_mode', compiler_mode)
 
-    print '  Compiler:', env['CC'], '(%s)' % compiler
-    print '  Platform:', env['PLATFORM']
-    print '      Mode:', compiler_mode
-    print '      Arch:', env['TARGET_ARCH']
+    print('  Compiler:', env['CC'], '(%s)' % compiler)
+    print('  Platform:', env['PLATFORM'])
+    print('      Mode:', compiler_mode)
+    print('      Arch:', env['TARGET_ARCH'])
 
 
     # SCONS_JOBS environment variable
@@ -180,7 +180,7 @@ def configure(conf, cstd = 'c99'):
         num_jobs = multiprocessing.cpu_count()
 
     SetOption('num_jobs', num_jobs)
-    print '      Jobs:', GetOption('num_jobs')
+    print('      Jobs:', GetOption('num_jobs'))
 
 
     # distcc

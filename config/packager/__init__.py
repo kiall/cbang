@@ -77,8 +77,8 @@ def _GetPackageType(env):
         if dist in ['centos', 'redhat', 'fedora']: return 'rpm'
 
         # Try to guess
-        print 'WARNING: Unrecognized POSIX distribution ' + dist + \
-            ', trying to determine package type from filesystem'
+        print('WARNING: Unrecognized POSIX distribution ' + dist +
+              ', trying to determine package type from filesystem')
 
         if os.path.exists('/usr/bin/dpkg'): return 'deb'
         if os.path.exists('/usr/bin/rpmbuild'): return 'rpm'
@@ -205,7 +205,7 @@ def CopyToPackage(env, sources, target, perms = 0644, dperms = 0755):
     ignores = ignore_patterns(*env.get('PACKAGE_EXCLUDES'))
 
     for src, dst, mode in resolve_file_map(sources, target, ignores):
-        print 'installing "%s" to "%s"' % (src, dst)
+        print('installing "%s" to "%s"' % (src, dst))
 
         if mode is not None: perms = mode
         dst_dir = os.path.dirname(dst)
@@ -222,7 +222,7 @@ def InstallFiles(env, key, target, perms = 0644, dperms = 0755):
 
 
 def RunCommand(env, cmd):
-    print '@', cmd
+    print('@' + cmd)
     CommandAction(cmd).execute(None, [], env)
 
 

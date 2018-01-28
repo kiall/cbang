@@ -8,7 +8,7 @@ from SCons.Action import CommandAction
 
 
 def RunCommandOrRaise(env, cmd):
-    print '@', cmd
+    print('@' + cmd)
     ret = CommandAction(cmd).execute(None, [], env)
     if ret: raise Exception('command failed, return code %s' % str(ret))
 
@@ -79,9 +79,9 @@ def build_function(target, source, env):
         cmd += ['--distribution', dist]
         cmd += ['--package-path', build_dir]
     else:
-        print "WARNING: No distribution specified. Attempting to build " \
-          "using --root. Package will not have Resources and will put " \
-          "wrong package id in receipts."
+        print("WARNING: No distribution specified. Attempting to build "
+              "using --root. Package will not have Resources and will put "
+              "wrong package id in receipts.")
         cmd += ['--root', root_dir, env.get('pkg_install_to', '/'),
                 '--id', env.get('pkg_id'),
                 '--version', env.get('version')]

@@ -41,7 +41,7 @@ build_dir_distribution_xml = \
 
 
 def RunCommandOrRaise(env, cmd):
-    print '@', cmd
+    print('@' + cmd)
     ret = CommandAction(cmd).execute(None, [], env)
     if ret: raise Exception('command failed, return code %s' % str(ret))
 
@@ -110,13 +110,13 @@ def remove_cruft_from_directory(d, env):
         for name in cruft_files:
             if name in files:
                 path = os.path.join(root, name)
-                print 'WOULD BE deleting ' + path
+                print('WOULD BE deleting ' + path)
                 #os.remove(path)
         for name in cruft_dirs:
             if name in dirs:
                 dirs.remove(name)
                 path = os.path.join(root, name)
-                print 'WOULD BE deleting directory ' + path
+                print('WOULD BE deleting directory ' + path)
                 #shutil.rmtree(path)
 
 
@@ -128,10 +128,10 @@ def rename_prepostflight_scripts(scripts_dir):
     post1 = os.path.join(scripts_dir, 'postflight')
     post2 = os.path.join(scripts_dir, 'postinstall')
     if os.path.isfile(pre1) and not os.path.exists(pre2):
-        print 'renaming %s to %s' % (pre1, pre2)
+        print('renaming %s to %s' % (pre1, pre2))
         os.rename(pre1, pre2)
     if os.path.isfile(post1) and not os.path.exists(post2):
-        print 'renaming %s to %s' % (post1, post2)
+        print('renaming %s to %s' % (post1, post2))
         os.rename(post1, post2)
 
 
@@ -268,7 +268,7 @@ def build_component_pkgs(env):
         if not info.get('params_json_loaded'):
             jsonfile = os.path.join(home, filename_package_info_json)
             if os.path.isfile(jsonfile):
-                print 'loading info from %s' % jsonfile
+                print('loading info from %s' % jsonfile)
                 info2 = json.load(jsonfile)
                 # merge
                 # trust what we were passed over what json says
@@ -309,7 +309,7 @@ def build_component_pkgs(env):
         try:
             build_component_pkg(info, env)
         except Exception as e:
-            print 'unable to build component ' + info.get('name')
+            print('unable to build component ' + info.get('name'))
             raise e
 
     # replace distpkg_components with modified/created info list
@@ -359,16 +359,16 @@ def unlock_keychain(env, keychain=None, password=None):
         try:
             sanitized_cmd = cmd[:3] + ['xxxxxx']
             if keychain: sanitized_cmd += [keychain]
-            print '@', sanitized_cmd
+            print('@' + sanitized_cmd)
             # returns 0 if keychain already unlocked, even if pass is wrong
             ret = CommandAction(cmd).execute(None, [], env)
             if ret: raise Exception(
                 'unlock-keychain failed, return code %s' % str(ret))
         except Exception as e:
-            print 'unable to unlock keychain "%s"' % name
+            print('unable to unlock keychain "%s"' % name)
             raise e
     else:
-        print 'skipping unlock "%s"' % name + '; no password given'
+        print('skipping unlock "%s"' % name + '; no password given')
 
 
 def sign_flat_package(target, source, env):
@@ -392,7 +392,7 @@ def sign_or_copy_product_pkg(target, source, env):
     if env.get('sign_id_installer'):
         sign_flat_package(target, source, env)
         return
-    print 'NOT signing package; no sign_id_installer provided; copying instead...'
+    print('NOT signing package; no sign_id_installer provided; copying instead...')
     shutil.copy2(source, target)
 
 
@@ -450,8 +450,8 @@ def build_or_copy_distribution_template(env):
 
     if os.path.exists(target): return
 
-    print 'WARNING: did not generate distribution.xml; ' \
-        + 'using pre-built template %s' % source
+    print('WARNING: did not generate distribution.xml; '
+          'using pre-built template %s' % source)
     if not os.path.isfile(source):
         raise Exception('pre-built template does not exist %s' % source)
     #Execute(Copy(target, source))
@@ -465,14 +465,14 @@ def build_distribution_template(env, target=None):
     if not target:
         target = build_dir_distribution_xml
 
-    print 'generating ' + target
+    print('generating ' + target)
 
     distpkg_target = env.get('distpkg_target', '10.5')
     distpkg_arch = env.get('distpkg_arch')
     if not distpkg_arch:
         distpkg_arch = env.get('package_arch')
     if distpkg_arch in (None, '', 'intel'):
-        print 'using distpkg_arch i386 instead of "%s"' % distpkg_arch
+        print('using distpkg_arch i386 instead of "%s"' % distpkg_arch)
         distpkg_arch = 'i386'
 
     # generate new tree
@@ -670,14 +670,14 @@ def patch_expanded_pkg_distribution(target, source, env):
         tree = etree.parse(fpath)
     # make changes
     if tree:
-        print 'patching ' + fpath
+        print('patching ' + fpath)
         root = tree.getroot()
         if root.tag != 'installer-script':
-            print 'changing root tag from %s to installer-script' % root.tag
+            print('changing root tag from %s to installer-script' % root.tag)
             root.tag = 'installer-script'
         minSpecVersion = root.get('minSpecVersion')
         if minSpecVersion != '1':
-            print 'changing minSpecVersion from %s to 1' % minSpecVersion
+            print('changing minSpecVersion from %s to 1' % minSpecVersion)
             root.set('minSpecVersion', '1')
         # overwrite back to fpath
         f = None
@@ -689,12 +689,12 @@ def patch_expanded_pkg_distribution(target, source, env):
         # FIXME detect any failures somehow
         return
     # failed to load xml
-    print 'WARNING: unable to load and patch %s' % fpath
-    print 'WARNING: pkg may require OSX 10.6.6 or later'
+    print('WARNING: unable to load and patch %s' % fpath)
+    print('WARNING: pkg may require OSX 10.6.6 or later')
 
 
 def create_localizable_strings(env):
-    print 'generating Localizable.strings'
+    print('generating Localizable.strings')
     # English only for now
     components = env.get('distpkg_components', [])
     if components is None: components = []
@@ -719,12 +719,12 @@ def create_localizable_strings(env):
         line = '"%s" = "%s";' % (key, value)
         lines.append(line)
         if not value:
-            print 'no description found for component ' + comp['name']
+            print('no description found for component ' + comp['name'])
     # save it (overwrites if exists)
     d = build_dir_resources + '/en.lproj'
     if not os.path.isdir(d): os.makedirs(d, 0755)
     fname = d + '/Localizable.strings'
-    print 'writing ' + fname
+    print('writing ' + fname)
     env.WriteStringToFile(fname, lines)
 
 
@@ -761,7 +761,7 @@ def flat_dist_pkg_build(target, source, env):
     # TODO: more validation here ...
 
     name = env.get('package_name')
-    print 'Building "%s" flat, target %s' % (name, distpkg_target)
+    print('Building "%s" flat, target %s' % (name, distpkg_target))
 
     # copy our own dist Resources
     if env.get('distpkg_resources'):
@@ -814,11 +814,11 @@ def flat_dist_pkg_build(target, source, env):
     if not desc:
         desc = env.get('summary', '').strip()
     # note: desc may be '', write anyway
-    print 'writing ' + filename_package_desc_txt
+    print('writing ' + filename_package_desc_txt)
     env.WriteStringToFile(filename_package_desc_txt, desc)
 
     # write package.txt
-    print 'writing ' + filename_package_build_txt
+    print('writing ' + filename_package_build_txt)
     env.WriteStringToFile(filename_package_build_txt, target_zip)
 
 

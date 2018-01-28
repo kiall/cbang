@@ -144,7 +144,7 @@ def build_function(target, source, env):
 
     # Execute
     if 'deb_execute' in env:
-        print env.get('deb_execute')
+        print(env.get('deb_execute'))
         cmd = string.Template(env.get('deb_execute'))
         cmd = cmd.substitute(package_root = os.path.realpath(build_dir))
         CommandAction(cmd).execute(None, [None], env)

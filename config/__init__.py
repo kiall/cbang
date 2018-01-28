@@ -234,7 +234,7 @@ def CBLoadTool(env, name, paths = []):
     if home is None:
         msg += '\nHave you set ' + home_env_var + '?'
 
-    print msg
+    print(msg)
     raise Exception('Failed to load tool ' + name)
 
 
@@ -319,8 +319,8 @@ def CBConfigure(env):
     if os.environ.has_key('SCONS_OPTIONS'):
         options = os.environ['SCONS_OPTIONS']
         if not os.path.exists(options):
-            print 'options file "%s" set in SCONS_OPTIONS does not exist' % \
-                options
+            print('options file "%s" set in SCONS_OPTIONS does not exist' %
+                  options)
             Exit(1)
 
         configs.append(options)
