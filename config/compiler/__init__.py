@@ -177,7 +177,7 @@ def configure(conf, cstd = 'c99'):
 
 
     # SCONS_JOBS environment variable
-    if num_jobs < 1 and os.environ.has_key('SCONS_JOBS'):
+    if num_jobs < 1 and 'SCONS_JOBS' in os.environ:
         num_jobs = int(os.environ.get('SCONS_JOBS', num_jobs))
 
     # Default num jobs

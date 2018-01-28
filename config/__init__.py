@@ -28,7 +28,7 @@ except NameError:
 def CBCheckEnv(ctx, name, require = False):
     ctx.did_show_result = 1
 
-    if os.environ.has_key(name):
+    if name in os.environ:
         return os.environ[name]
 
     elif require: raise Exception("Missing environment variable: " + name)
@@ -333,7 +333,7 @@ def CBConfigure(env):
     # Load config files
     configs = []
 
-    if os.environ.has_key('SCONS_OPTIONS'):
+    if 'SCONS_OPTIONS' in os.environ:
         options = os.environ['SCONS_OPTIONS']
         if not os.path.exists(options):
             print('options file "%s" set in SCONS_OPTIONS does not exist' %

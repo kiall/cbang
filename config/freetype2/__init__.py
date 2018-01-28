@@ -7,7 +7,7 @@ def configure(conf):
 
     conf.CBCheckHome('freetype2', inc_suffix=['/include', '/include/freetype2'])
 
-    if not os.environ.has_key('FREETYPE2_INCLUDE'):
+    if 'FREETYPE2_INCLUDE' not in os.environ:
         try:
             env.ParseConfig('freetype-config --cflags')
         except OSError: pass
